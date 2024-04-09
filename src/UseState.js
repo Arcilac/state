@@ -3,6 +3,24 @@ import './UseStates.css';
 
 function UseState({ name }) {
     const [error, setError] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
+
+    React.useEffect(() => {
+        console.log("beginning effect")
+
+        if (!!loading) {
+            setTimeout(() => {
+                console.log("doing the validation")
+    
+                setLoading(false);
+    
+                console.log("completing validation")
+            }, 2000 )
+        }
+       
+
+        console.log("ending effect")
+    }, [loading]);
     return (
         <div>
         <h2>Delete {name}</h2>
@@ -11,12 +29,16 @@ function UseState({ name }) {
         {error && (
             <p>Error: the code is wrong </p>
         )}
+        
+        {loading && (
+            <p> Loading... </p>
+        )}
 
         <input placeholder="security code" />
         <button
-        onClick={() => setError(!error)}
+        onClick={() => setLoading(true)}
         >Check</button>
-    </div>
+        </div>
     )
 }
 
