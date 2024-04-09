@@ -1,5 +1,8 @@
 import React from "react";
+import { Loading } from './Loading';
 // import './UseStates.css';
+
+const SECURITY_CODE = 'paradigma';
 
 class ClassState extends React.Component{
 
@@ -7,28 +10,56 @@ class ClassState extends React.Component{
         super(props);
         
         this.state = {
-            error: true,
+            value: '',
+            error: false,
+            loading: false,
         };
     }
 
-    render() {
+    componentDidUpdate() {
+        console.log('update');
+    
+        if (!!this.state.loading) {
+          setTimeout(() => {
+            console.log("doing the validation")
+      
+           if (SECURITY_CODE === this.state.value) {
+            this.setState({ error: false,  loading: false });
+           } else {
+            this.setState({ error: true, loading: false });
+           }
+            
+            console.log("completing validation")
+          }, 2000);
+        }
+      }
+      
+      render() {
         return (
-            <div>
-                <h2>Delete {this.props.name}</h2>
-                <p>type the security code to check that you want to delete </p>
-
-                {this.state.error && (
-            <p>Error: the code is wrong </p>
-        )}
-                <input placeholder="security code" />
-                <button
-                    onClick={() => 
-                        this.setState(prevState => ({error: !prevState.error  }))
-                    }
-                >Check</button>
-            </div>
-        )
+          <div>
+            <h3>Delete {this.props.name}</h3>
+            
+            <p>type the security code</p>
+    
+            {(this.state.error && !this.state.loading) && (
+              <p>Error: the code is wrong</p>
+            )}
+    
+            {this.state.loading && (
+              <Loading />
+            )}
+    
+            <input placeholder="security code" 
+                value={this.state.value}
+                onChange={(event) => {
+                    this.setState({ value: event.target.value })
+                }}
+            />
+            <button
+              onClick={() => this.setState({ loading: true })}
+            >Check</button>
+          </div>
+        );
+      }
     }
-}
-
-export { ClassState };
+export { ClassState }

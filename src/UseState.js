@@ -1,9 +1,15 @@
 import React from "react";
-import './UseStates.css';
+
+const SECURITY_CODE = 'paradigma';
 
 function UseState({ name }) {
-    const [error, setError] = React.useState(true);
-    const [loading, setLoading] = React.useState(false);
+    const [state, setState] = React.useState({
+        value: '',
+        error: false,
+        loading: false,
+    });
+    
+    console.log(value)
 
     React.useEffect(() => {
         console.log("beginning effect")
@@ -12,8 +18,19 @@ function UseState({ name }) {
             setTimeout(() => {
                 console.log("doing the validation")
     
-                setLoading(false);
-    
+                if (state.value === SECURITY_CODE) {
+                    setState({
+                        loading: false,
+                    });
+                   // setLoading(false);
+                  //  setError(false);
+                }else {
+                    setState({
+                        error: true,
+                        loading: false,
+                    });
+                }
+                
                 console.log("completing validation")
             }, 2000 )
         }
@@ -24,19 +41,32 @@ function UseState({ name }) {
     return (
         <div>
         <h2>Delete {name}</h2>
-        <p>type the security code to check that you want to delete </p>
+        <p>type the security code</p>
 
-        {error && (
+        {(state.error && !state.loading) && (
             <p>Error: the code is wrong </p>
         )}
         
-        {loading && (
+        {state.loading && (
             <p> Loading... </p>
         )}
 
-        <input placeholder="security code" />
+        <input 
+        placeholder="security code" 
+        value={state.value}
+        onChange={(event) => {
+             setError(false);
+            setValue(event.target.value);
+        }}  
+        />
         <button
-        onClick={() => setLoading(true)}
+        onClick={() => {
+            //setError(false); correct
+           // setLoading(true);
+           setState({
+            loading: true,
+        });
+        }}
         >Check</button>
         </div>
     )
