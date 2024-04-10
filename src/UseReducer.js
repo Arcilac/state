@@ -1,4 +1,5 @@
 import React from "react"
+import  "./UseReducer.css"
 
 const SECURITY_CODE = "paradigma"
 
